@@ -66,7 +66,7 @@ int main()
 			printf("Send number: %d\n", rand_num);
 			memcpy(outbuf, &rand_num, sizeof(int));
 			sendto(local_sock, outbuf, sizeof(int), 0, 
-				(struct sockaddr*) &sock_addr, sizeof(addr_dst));
+				(struct sockaddr*) &sock_addr, sizeof(sock_addr));
 			rwflag = 0;
 		}
 		else
