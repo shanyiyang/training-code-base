@@ -1,3 +1,8 @@
+/***************************************************/
+/* This is a simple UDP server.                    */
+/* Use epoll and blocking function to read data.   */
+/***************************************************/
+
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -28,6 +33,7 @@ int main()
 	int 				i;
 	int 				epollfds;
 	int 				ret_num;
+	int					ret;
 	char 				outbuf[MAXBUFFERSIZE];
 	char 				inbuf[MAXBUFFERSIZE];
 	struct epoll_event 	event;
@@ -105,10 +111,9 @@ int main()
 					rand_num = rand() % 100;
 					printf("Send number: %d\n", rand_num);
 					memcpy(outbuf, &rand_num, sizeof(int));
-					sendto(ev_list[i].data.fd, outbuf, sizeof(int), 0, 
+					ret = sendto(ev_list[i].data.fd, outbuf, sizeof(int), 0, 
 							(struct sockaddr*) &addr_src, sizeof(addr_src));
-							
-					count ++;
+					count++;
 				}
 			}
 		}
