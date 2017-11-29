@@ -23,7 +23,6 @@ int main()
 {
 	/* Define variable */
 	struct sockaddr_in	sock_addr;
-	struct sockaddr_in	addr_src;
 	int 				local_sock;							// This socket is used for client to connect.
 	int 				read_size;
 	int					rand_num;
@@ -107,7 +106,7 @@ int main()
 					{
 						// Read a data from socket.
 						read_size = recvfrom(ev_list[i].data.fd, inbuf, sizeof(int), 0, 
-								(struct sockaddr*) &addr_src, &addr_size);
+								(struct sockaddr*) &sock_addr, &addr_size);
 						memcpy(&read_num, inbuf, read_size);
 						printf("Read number: %d\n", read_num);
 							
