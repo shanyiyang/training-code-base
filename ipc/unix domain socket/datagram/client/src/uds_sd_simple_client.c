@@ -12,6 +12,7 @@
 
 #define MAXBUFFERSIZE 1024
 #define SERVERIPC "/tmp/ipc_s.sock"
+#define CLIENTIPC "/tmp/ipc_c.sock"
 
 struct pass_value
 {
@@ -56,6 +57,13 @@ int main()
 	}
 	printf("Create socket successful!\n");
 
+	if(bind(local_sock, (struct sockaddr *) &sock_addr, sizeof(sock_addr)) < 0)
+	{
+		perror("Bind");
+		exit(1);
+	}
+	printf("Bind socket successful!\n");
+
 	// Destination address
 	memset(&addr_dst, 0, sizeof(struct sockaddr_un));
 	addr_dst.sun_family = PF_UNIX;
@@ -70,11 +78,11 @@ int main()
 		sendmsg.num = rand_num;
 		memcpy(sendmsg.msg, "Client message is", sizeof("Server message is"));
 		memcpy(outbuf, &sendmsg, sizeof(sendmsg));
-		sendto(local_sock, outbuf, sizeof(sendmsg), 0, 
+		sendto(local_sock, &outbuf, sizeof(sendmsg), 0, 
 				(struct sockaddr*) &addr_dst, sizeof(addr_dst));
 				
 		// Read a data from socket
-		read_size = recvfrom(local_sock, inbuf, MAXBUFFERSIZE, 0, 
+		read_size = recvfrom(local_sock, &inbuf, MAXBUFFERSIZE, 0, 
 				(struct sockaddr*) &addr_src, (socklen_t *) &addr_size);
 		memcpy(&receivemsg, inbuf, read_size);
 		printf("%s %d.\n", receivemsg.msg, receivemsg.num);
