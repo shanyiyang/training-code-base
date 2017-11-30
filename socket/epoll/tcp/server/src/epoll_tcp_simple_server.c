@@ -62,6 +62,9 @@ int main()
 	}
 	printf("Create socket successful!\n");
 	
+	// set non-blocking socket
+	fcntl(local_sock, F_SETFL, O_NONBLOCK);
+	
 	// Bind()
 	if (bind(local_sock, (struct sockaddr *) &addr_local, sizeof(addr_local)) == -1)
 	{

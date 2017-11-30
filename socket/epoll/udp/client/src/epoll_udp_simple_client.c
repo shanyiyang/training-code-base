@@ -63,6 +63,9 @@ int main()
 	}
 	printf("Create socket successful!\n");
 	
+	// set non-blocking socket
+	fcntl(local_sock, F_SETFL, O_NONBLOCK);
+	
 	// monitor fds
 	event.data.fd = local_sock;
 	event.events = EPOLLIN | EPOLLET;

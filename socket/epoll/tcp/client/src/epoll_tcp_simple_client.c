@@ -60,6 +60,9 @@ int main()
 		exit(1);
 	}
 	printf("Create socket successful!\n");
+	
+	// set non-blocking socket
+	fcntl(local_sock, F_SETFL, O_NONBLOCK);
 
 	// Connect
 	if ((connect(local_sock, (struct sockaddr *)&addr_local, (socklen_t) sizeof(addr_local))) == -1)
