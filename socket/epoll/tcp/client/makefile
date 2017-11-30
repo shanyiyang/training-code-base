@@ -9,7 +9,7 @@ OBJ  =  $(patsubst %.c,${DIR_OBJ}/%.o,$(notdir ${SRC}))
 LDFLAG = -l pthread
 CFLAG = -Wall
 
-TARGET = main
+TARGET = main.out
 
 BIN_TARGET = ${DIR_BIN}/${TARGET}
 
@@ -38,5 +38,5 @@ CLEAN:
 	rm -rf ${DIR_OBJ}/*.o
 	
 run:
-	@./bin/main
+	./bin/main.out
 
