@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sys/epoll.h>
+#include <fcntl.h>
 
 #define MAXBUFFERSIZE 1024
 #define MAXEVENT 10
@@ -116,6 +117,10 @@ int main()
 						perror("Accept");
 						exit(1);
 					}
+					
+					// set non-blocking socket
+					fcntl(remote_sock, F_SETFL, O_NONBLOCK);
+					
 					printf("Accept socket successful!\n");
 					event.data.fd = remote_sock;
 					event.events = EPOLLIN | EPOLLET;

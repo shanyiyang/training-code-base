@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sys/epoll.h>
+#include <fcntl.h>
 
 #define MAXBUFFERSIZE 1024
 #define MAXEVENT 10
@@ -60,9 +61,6 @@ int main()
 		exit(1);
 	}
 	printf("Create socket successful!\n");
-	
-	// set non-blocking socket
-	fcntl(local_sock, F_SETFL, O_NONBLOCK);
 
 	// Connect
 	if ((connect(local_sock, (struct sockaddr *)&addr_local, (socklen_t) sizeof(addr_local))) == -1)
@@ -71,6 +69,9 @@ int main()
 		exit(1);
 	}
 	printf("Connect server socket successful!\n");
+	
+	// set non-blocking socket
+	fcntl(local_sock, F_SETFL, O_NONBLOCK);
 	
 	// monitor fds
 	event.data.fd = local_sock;
@@ -118,7 +119,7 @@ int main()
 						memcpy(&read_num, inbuf, read_size);
 						printf("Read number: %d\n", read_num);
 						
-						rwflag= 1;	
+						rwflag = 1;	
 						count ++;
 					}
 				}

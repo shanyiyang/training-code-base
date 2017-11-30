@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sys/epoll.h>
+#include <fcntl.h>
 
 #define MAXBUFFERSIZE 1024
 #define MAXEVENT 10
@@ -33,7 +34,6 @@ int main()
 	int 				i;
 	int 				epollfds;
 	int 				ret_num;
-	int					ret;
 	char 				outbuf[MAXBUFFERSIZE];
 	char 				inbuf[MAXBUFFERSIZE];
 	struct epoll_event 	event;
@@ -114,7 +114,7 @@ int main()
 					rand_num = rand() % 100;
 					printf("Send number: %d\n", rand_num);
 					memcpy(outbuf, &rand_num, sizeof(int));
-					ret = sendto(ev_list[i].data.fd, outbuf, sizeof(int), 0, 
+					sendto(ev_list[i].data.fd, outbuf, sizeof(int), 0, 
 							(struct sockaddr*) &addr_src, sizeof(addr_src));
 					count++;
 				}

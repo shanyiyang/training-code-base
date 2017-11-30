@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sys/epoll.h>
+#include <fcntl.h>
 
 #define MAXBUFFERSIZE 1024
 #define MAXEVENT 10
