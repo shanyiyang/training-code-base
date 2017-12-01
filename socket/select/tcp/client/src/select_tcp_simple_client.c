@@ -19,7 +19,6 @@
 int main()
 {
 	/* Define variable */
-	// addr_local: Server socket address
 	struct sockaddr_in 	addr_local;
 	int 				local_sock;							// This socket is used for client to communicate with server.
 	int 				read_size;
@@ -27,7 +26,7 @@ int main()
 	int 				count = 0;
 	int 				read_num;
 	int 				maxfds;
-	int 				rwflag = 1;
+	int 				rwflag = 1;							// 1: Read, 0: Write
 	int 				i;
 	char 				outbuf[MAXBUFFERSIZE];
 	char				inbuf[MAXBUFFERSIZE];
