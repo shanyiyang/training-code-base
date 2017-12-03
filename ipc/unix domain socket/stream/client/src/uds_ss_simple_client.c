@@ -36,7 +36,7 @@ int main()
 	
 	// Initial random number.
 	srand(time(NULL));
-
+	
 	// socket()
 	if ((local_sock = socket(AF_UNIX, SOCK_STREAM, 0)) == -1)
 	{
@@ -66,10 +66,10 @@ int main()
 		sendmsg.num = rand_num;
 		memcpy(sendmsg.msg, "Client message is", sizeof("Server message is"));
 		memcpy(outbuf, &sendmsg, sizeof(sendmsg));
-		send(local_sock, outbuf, sizeof(sendmsg), 0);
+		send(local_sock, &outbuf, sizeof(sendmsg), 0);
 				
 		// Read a data from socket
-		read_size = recv(local_sock, inbuf, MAXBUFFERSIZE, 0);
+		read_size = recv(local_sock, &inbuf, MAXBUFFERSIZE, 0);
 		memcpy(&receivemsg, inbuf, read_size);
 		printf("%s %d.\n", receivemsg.msg, receivemsg.num);
 			
@@ -77,7 +77,6 @@ int main()
 	}
 	
 	close(local_sock);
-	unlink(CLIENTIPC);
 	unlink(SERVERIPC);
 
 	return 0;

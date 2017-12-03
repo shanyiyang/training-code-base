@@ -12,7 +12,6 @@
 
 #define MAXBUFFERSIZE 1024
 #define SERVERIPC "/tmp/ipc_s.sock"
-#define CLIENTIPC "/tmp/ipc_c.sock"
 
 struct pass_value
 {
@@ -64,7 +63,7 @@ int main()
 	while (count < 10)
 	{
 		// Read a data from socket
-		read_size = recvfrom(local_sock, inbuf, MAXBUFFERSIZE, 0, 
+		read_size = recvfrom(local_sock, &inbuf, MAXBUFFERSIZE, 0, 
 				(struct sockaddr*) &addr_src, (socklen_t *) &addr_size);
 		memcpy(&receivemsg, inbuf, read_size);
 		printf("%s %d.\n", receivemsg.msg, receivemsg.num);
@@ -75,7 +74,7 @@ int main()
 		sendmsg.num = rand_num;
 		memcpy(sendmsg.msg, "Server message is", sizeof("Server message is"));
 		memcpy(outbuf, &sendmsg, sizeof(sendmsg));
-		sendto(local_sock, outbuf, sizeof(sendmsg), 0, 
+		sendto(local_sock, &outbuf, sizeof(sendmsg), 0, 
 				(struct sockaddr*) &addr_src, sizeof(addr_src));
 				
 		count ++;
@@ -83,6 +82,5 @@ int main()
 	
 	close(local_sock);
 	unlink(SERVERIPC);
-	unlink(CLIENTIPC);
 	return 0;
 }

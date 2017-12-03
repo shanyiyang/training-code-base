@@ -79,7 +79,7 @@ int main()
 	while (count < 10)
 	{
 		// Read a data from socket
-		read_size = recv(remote_sock, inbuf, MAXBUFFERSIZE, 0);
+		read_size = recv(remote_sock, &inbuf, MAXBUFFERSIZE, 0);
 		memcpy(&receivemsg, inbuf, read_size);
 		printf("%s %d.\n", receivemsg.msg, receivemsg.num);
 
@@ -89,7 +89,7 @@ int main()
 		sendmsg.num = rand_num;
 		memcpy(sendmsg.msg, "Server message is", sizeof("Server message is"));
 		memcpy(outbuf, &sendmsg, sizeof(sendmsg));
-		send(remote_sock, outbuf, sizeof(sendmsg), 0);
+		send(remote_sock, &outbuf, sizeof(sendmsg), 0);
 				
 		count ++;
 	}
