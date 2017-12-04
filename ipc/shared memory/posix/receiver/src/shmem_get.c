@@ -37,7 +37,7 @@ int main()
 	pass_v*		data_ptr = NULL;
 	int 		run = 0;
 	
-	// Open a shared memory.
+	// Open a file for shared memory.
 	if ((shmemid = shm_open(SHAREDMEMPATH, O_RDWR, 0)) < 0)
 	{
 		perror("shm_open");
@@ -66,7 +66,7 @@ int main()
 	// Map file to memory.
 	if ((mem_ptr = mmap((void *)0x87000000, status.st_size, PROT_READ | PROT_WRITE, MAP_SHARED, shmemid, 0)) < 0)
 	{
-		perror("mem_ptr");
+		perror("mmap");
 		exit(EXIT_FAILURE);
 	}
 	printf("Map the shared memory.\n");
@@ -134,13 +134,13 @@ int main()
 	
 	printf("\n");
 	
-	// Unmap the memory.
+	// Detach the shared memory.
 	if (munmap(mem_ptr, mem_size) < 0)
 	{
 		perror("mumap ");
 		exit(EXIT_FAILURE);
 	}
-	printf("Unmap the shared memory.\n");
+	printf("Detach the shared memory.\n");
 	printf("\n");
 
 	close(shmemid);

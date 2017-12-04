@@ -37,7 +37,7 @@ int main()
 	pass_v*		data_ptr = NULL;
 	int 		run = 0;
 	
-	// Create a shared memory.
+	// Create a file for shared memory.
 	if ((shmemid = shm_open(SHAREDMEMPATH, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR)) < 0)
 	{
 		perror("shm_open");
@@ -76,7 +76,7 @@ int main()
 	// Map file to memory.
 	if ((mem_ptr = mmap((void *)0x87000000, status.st_size, PROT_READ | PROT_WRITE | O_EXCL, MAP_SHARED, shmemid, 0)) < 0)
 	{
-		perror("mem_ptr");
+		perror("mmap");
 		exit(EXIT_FAILURE);
 	}
 	printf("Map the shared memory.\n");
@@ -104,7 +104,7 @@ int main()
 	printf("The address of the data_ptr pointer is %p.\n", data_ptr);
 	printf("\n");
 	
-	// Initial shared memory.
+	// Initial validflag.
 	*validflag_ptr = 1;		// 0 : valid, 1 : invalid
 	
 	// Transer data into the shared memory.
@@ -181,13 +181,13 @@ int main()
 	printf("Destroy the semaphore.\n");
 	printf("\n");
 	
-	// Unmap the memory.
+	// Detach the shared memory.
 	if (munmap(mem_ptr, mem_size) < 0)
 	{
 		perror("mumap");
 		exit(EXIT_FAILURE);
 	}
-	printf("Unmap the shared memory.\n");
+	printf("Detach the shared memory.\n");
 	printf("\n");
 
 	// Unlink the file.
