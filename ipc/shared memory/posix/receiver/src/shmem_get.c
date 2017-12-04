@@ -11,8 +11,8 @@
 #include <string.h>
 #include <errno.h>
 
-#define SHAREDMEMPATH "\\tmp\\shmem.men"
-#define SEMAPHOREPATH "\\tmp\\semaphore.sem"
+#define SHAREDMEMPATH "shmem.men"
+#define SEMAPHOREPATH "semaphore.sem"
 #define TRUE 0
 #define FALSE 1
 
@@ -131,6 +131,8 @@ int main()
 			}
 		}
 	}
+	
+	printf("\n");
 	
 	// Unmap the memory.
 	if (munmap(mem_ptr, mem_size) < 0)

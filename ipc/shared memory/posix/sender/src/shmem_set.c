@@ -11,8 +11,8 @@
 #include <string.h>
 #include <errno.h>
 
-#define SHAREDMEMPATH "\\tmp\\shmem.men"
-#define SEMAPHOREPATH "/tmp/semaphore.sem"
+#define SHAREDMEMPATH "shmem.men"
+#define SEMAPHOREPATH "semaphore.sem"
 #define TRUE 0
 #define FALSE 1
 
@@ -31,7 +31,6 @@ int main()
 	size_t		mem_size = 0;
 	sem_t*		locker;
 	struct stat	status;
-	int* 		value = NULL;
 	
 	// Shared memory data pointer.
 	int*		validflag_ptr = NULL;
@@ -75,7 +74,7 @@ int main()
 	printf("\n");
 
 	// Map file to memory.
-	if ((mem_ptr = mmap((void *)0x87000000, status.st_size, PROT_READ | PROT_WRITE, MAP_SHARED, shmemid, 0)) < 0)
+	if ((mem_ptr = mmap((void *)0x87000000, status.st_size, PROT_READ | PROT_WRITE | O_EXCL, MAP_SHARED, shmemid, 0)) < 0)
 	{
 		perror("mem_ptr");
 		exit(EXIT_FAILURE);
@@ -83,9 +82,9 @@ int main()
 	printf("Map the shared memory.\n");
 	printf("The start address is %p at end child process memory.\n", mem_ptr);
 	printf("\n");
-
+	
 	// Initial a semaphore to protect data.
-	if ((locker = sem_open(SEMAPHOREPATH, O_CREAT, 0644, 1)) < 0)
+	if ((locker = sem_open(SEMAPHOREPATH, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, 1)) < 0)
 	{
 		perror("sem_open");
 		exit(EXIT_FAILURE);
@@ -117,7 +116,6 @@ int main()
 			perror("semaphore_wait");
 			exit(EXIT_FAILURE);
 		}
-		printf("Critiacl section lock.\n");
 		
 		// Process data.
 		if (*validflag_ptr == TRUE)
@@ -154,7 +152,6 @@ int main()
 				perror("semaphore_post");
 				exit(EXIT_FAILURE);
 			}
-			printf("Critiacl section unlock.\n");
 		}
 	}
 	
@@ -164,6 +161,16 @@ int main()
 		if (*validflag_ptr == FALSE)
 			break;
 	}
+	printf("\n");
+	
+	// Unlink semaphore file.
+	if (sem_unlink(SEMAPHOREPATH) < 0)
+	{
+		perror("sem_unlink");
+		exit(EXIT_FAILURE);
+	}
+	printf("Unlink the file name ofthe semaphore file.\n");
+	printf("\n");
 	
 	// Destroy the semaphor object.
 	if (sem_destroy(locker) < 0)
@@ -189,7 +196,7 @@ int main()
 		perror("shm_unlink");
 		exit(EXIT_FAILURE);
 	}
-	printf("Unlink the file.\n");
+	printf("Unlink the file name of the shared memory file.\n");
 	printf("\n");
 
 	// Close shared memory file descriptor.
